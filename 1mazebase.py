@@ -5,7 +5,7 @@ import sys
 
 ###Setup
 #print(ImageColor.getcolor('red', 'RGBA'))
-basefilename = input('Input maze file name: ')
+basefilename = input('Enter Maze File Name (no extension/suffix): ')
 filename = basefilename + '.png'
 #filename = 'test1.png'
 maze = Image.open(filename)
@@ -181,21 +181,15 @@ def drawUp(x,y):
                 break
 
 ###Check Functions
-    #Up/Left = False
+    #Down/Right = False
 def checkVert(x,y):
     z = 0
     for i in range(3):
         r = maze.getpixel((x,y-(int(halfspace) + i)))
         if (r == 0):
             z = 1
-            if x > 465:
-                print("Z=1",(x,y-(int(halfspace) + i)),'r',r)
-        else:
-            print((x,y-(int(halfspace) + i)),'r',r)
-    if x > 465:
-        print("Z:",z)
     if (z == 1):
-        print (r, "Turn Down")
+        #print (r, "Turn Down")
         return False
         #return ("Turn Down")
     else:
@@ -264,13 +258,9 @@ def rightSequence(x,y):
     x,y = drawRight(x, y)
     #print("->entered right seq")
     if checkVert(x,y) == False:
-        if (x>470):
-            print ("nextDir = Down")
         nextDir = 3
         return nextDir
     else:
-        if (x>470):
-            print ((x,y),checkVert(x,y),"nextDir = Up")
         nextDir = 2
         return nextDir
 def leftSequence(x,y):
@@ -285,10 +275,10 @@ def leftSequence(x,y):
         nextDir = 2
         return nextDir
 def downSequence(x,y):
-    print('x,y downSeq',x,y)
+    #print('x,y downSeq',x,y)
     drawDown(x,y)
     x,y = drawDown(x, y)
-    print('x,y afterdownSeq',x,y)
+    #print('x,y afterdownSeq',x,y)
     #print ("HEREREREREREERE", x,y)
     if checkHor(x,y) == False:
         #print ("nextDir = Right")
@@ -381,14 +371,13 @@ while (xcheck is not 0) and (xcheck is not (width-1)) and (ycheck is not 0) and 
         nextDir = downSequence(x,y)
         x,y = drawDown(x, y)
         ycheck = y
-        
         #print ("y",y)
         #print ("coordinates: ", x,y)
         #print ("nextDir: ", nextDir)
     else:
-        print ("stop")
-    #print (xcheck, ycheck)
-#print ("startDir: ", startDir)
+        print ("Error")
+        #print (xcheck, ycheck)
+        #print ("startDir: ", startDir)
 
 
 maze.save(basefilename + 'solved.png', 'PNG')

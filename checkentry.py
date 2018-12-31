@@ -1,11 +1,13 @@
 from PIL import Image, ImageColor, ImageDraw, ImageEnhance
 import sys
-
+#from mazefunctions import checkFile
 
 
 def checkEntry(filename):
     x = 0
     y = 0
+    #checkFile(filename)
+    
     maze = Image.open(filename)
     maze = maze.convert('P') # conversion to RGB
     #maze = maze.load()

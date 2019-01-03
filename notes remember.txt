@@ -1,0 +1,6 @@
+remember to change:
+	checkHor/checkVert
+		for loops go farther than they should, issue will arise with differing pathwidths in mazes
+		actually may be an issue with for loop not detecting that its reached the exit path 
+
+	lol nvm forgot to uncomment nextDir = 5 at end of sequence if boundary reached

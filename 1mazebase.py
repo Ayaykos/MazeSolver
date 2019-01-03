@@ -205,6 +205,7 @@ def checkHor(x,y):
     else:
         for i in range(3):
             r = maze.getpixel((x+(int(halfspace) + i),y))
+            #print("this is r:",r,x,(x+(int(halfspace) + i),y))
             if (r == 0):
                 z = 2
         if (z == 1):
@@ -212,7 +213,7 @@ def checkHor(x,y):
             return False
             #return ("Turn Right")
         else:
-            return ('Dead end')
+            return ('Dead end',z)
 
 
 def rightSequence(x,y,divkey):
@@ -328,6 +329,7 @@ def downSequence(x,y):
     x,y = drawDown(x, y)
     #print('x,y afterdownSeq',x,y)
     #print ("HEREREREREREERE", x,y)
+    print("checkHor:",checkHor(x,y))
     if checkHor(x,y) == False:
         #print ("nextDir = Right")
         nextDir = 0
@@ -398,7 +400,7 @@ def pathFind(x,y,nextDir,divkey):
             x,y = drawLeft(x, y)
             xcheck = x
             if xcheck == 0 or xcheck == (width-1):
-                #nextDir = 5
+                nextDir = 5
                 xcheck = 1
                 print ('xcheck', xcheck,nextDir, x, y)
             #print ("nextDir: ", nextDir)
@@ -410,7 +412,7 @@ def pathFind(x,y,nextDir,divkey):
             x,y = drawUp(x, y)
             ycheck = y
             if ycheck == 0 or ycheck == (height-1):
-                #nextDir = 5
+                nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
             #print ("coordinates: ", x,y)
@@ -419,18 +421,20 @@ def pathFind(x,y,nextDir,divkey):
         elif nextDir == 3:
             print("------------------->TURN DOWN<-------------------",x,y)
             currentDir = nextDir
+            print("about to find nextDir:", nextDir)
             nextDir = downSequence(x,y)
             x,y = drawDown(x, y)
+            print("checking x and y after downSeq and drawDown:",x,y)
             ycheck = y
             if ycheck == 0 or ycheck == (height-1):
-                #nextDir = 5
+                nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
             #print ("y",y)
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
         elif nextDir == 4:
-            print("dead end, break")
+            print("dead end, break",x,y)
             xcheck = 0
             return False
             break

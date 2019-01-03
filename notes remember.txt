@@ -4,3 +4,8 @@ remember to change:
 		actually may be an issue with for loop not detecting that its reached the exit path 
 
 	lol nvm forgot to uncomment nextDir = 5 at end of sequence if boundary reached
+
+potential issue check later:
+	rightDivUp 
+	changed x += halfspace to x += (halfspace + (halfspace/3))
+	also rightDivDown had x += halfspace + (halfspace/3) but changed to x += (halfspace + (halfspace/3))

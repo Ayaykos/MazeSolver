@@ -216,72 +216,29 @@ def checkHor(x,y):
             return ('Dead end',z)
 
 
-def rightSequence(x,y,divkey):
+def rightSequence(x,y):
     drawRight(x,y)
-    checkIfBothFalse = 0
-    print("instide right sequence before any changes: x,y,drawRight(x, y)[0],divkey:", x, y,drawRight(x, y)[0],divkey)
-    """
-    rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)
-    #rightDivergeUpCheck(x,y,drawRight(x, y)[0],divkey)
-    
-    if (rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)[0]) == True:
+    #checkIfBothFalse = 0
+    print("instide right sequence before any changes: x,y,drawRight(x, y)[0]:", x, y,drawRight(x, y)[0])
+
+    if (rightDivergeDown(x,y,drawRight(x, y)[0])[0]) == True:
         print ("    rightSequence if rightDivDownCheck is True, x,y:",x,y)
-        divkey = True
-        print("DIVKEY",divkey)
-        if(rightDivergeDown(rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)[1],y,True)) == True:
-        #if(rightDivergeDown(rightDivergeDownCheck(x,y,drawRight(x, y)[0])[1],y,divkey)) == True:
-            return 5
-        else:
-            print("            right sequence after rightDivergeDownCheck returned false")
-    else:
-        checkIfBothFalse += 1
-    if (rightDivergeUpCheck(x,y,drawRight(x, y)[0],divkey)[0]) == True:
-        print("    rightSequence if rightDivUpCheck is True, else, x,y:",x,y)
-        divkey = True
-        if (rightDivergeUp(rightDivergeUpCheck(x,y,drawRight(x, y)[0],divkey)[1],y,True)) == True:
-            return 5
-
-        else:
-            print("            right sequence after rightDivergeUpCheck returned false")
-            if checkIfBothFalse == 1:
-                print("                    right sequence, checkIfBothFalse == 1")
-                return 4
-        #print("ok")
-       
-
-    else:
-        checkIfBothFalse += 1
-    #if checkIfBothFalse > 1:
-        #print("ehhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",(rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)[0]))
-        #return 4
-    divkey = False
-    """
-
-    if (rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)[0]) == True:
-        print ("    rightSequence if rightDivDownCheck is True, x,y:",x,y)
-        listdivs = rightDivergeDownCheck(x,y,drawRight(x, y)[0],divkey)[1]
+        listdivs = rightDivergeDown(x,y,drawRight(x, y)[0])[1]
         print("    listdivs:",listdivs)
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,3,divkey)) == True:
+            if (pathFind(listdivs[i],y,3)) == True:
                 #print('rDU, listdiv[i]:',listdivs[i])
                 return True
             #print('listdiv[i]:',listdivs[i])
-    if (rightDivergeUpCheck(x,y,drawRight(x, y)[0],divkey)[0]) == True:
+    if (rightDivergeUp(x,y,drawRight(x, y)[0])[0]) == True:
         print("    rightSequence if rightDivUpCheck is True, else, x,y:",x,y)
-        listdivs = rightDivergeUpCheck(x,y,drawRight(x, y)[0],divkey)[1]
+        listdivs = rightDivergeUp(x,y,drawRight(x, y)[0])[1]
         print("    listdivs:",listdivs)
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,2,divkey)) == True:
+            if (pathFind(listdivs[i],y,2)) == True:
                 #print('rDU, listdiv[i]:',listdivs[i])
                 return True
             #print('listdiv[i]:',listdivs[i])
-        
-    #rightDiverge(x,y,drawRight(x, y)[0])
-    #rightDivergeDown(x,y,drawRight(x, y)[0])
-    #print("rightSequence Loop")
-    #rightDivergeUp(x,y,drawRight(x, y)[0])
-    #divpoints.append(rightDivergeDown(x,y,drawRight(x, y)[0]))
-    #rightDiverge(x,y,drawRight(x, y)[0])
     x,y = drawRight(x, y)
     #print("->entered right seq")
     if checkVert(x,y) == False:
@@ -294,17 +251,29 @@ def rightSequence(x,y,divkey):
         print("checkVert:",checkVert(x,y))
         nextDir = 4
         return nextDir
-        """
-        if checkIfBothFalse > 1:
-            nextDir = 4, False
-            return nextDir
-        else:
-            nextDir = 4, True
-            return nextDir
-        """
+
 def leftSequence(x,y):
     drawLeft(x,y)
 
+    print("Entered left sequence")
+    if (leftDivergeDown(x,y,drawLeft(x, y)[0])[0]) == True:
+        print ("    leftSequence if leftDivDownCheck is True, x,y:",x,y)
+        listdivs = leftDivergeDown(x,y,drawLeft(x, y)[0])[1]
+        print("    listdivs leftDivergeDown:",listdivs)
+        for i in range(len(listdivs)):
+            if (pathFind(listdivs[i],y,3)) == True:
+                #print('rDU, listdiv[i]:',listdivs[i])
+                return True
+            #print('listdiv[i]:',listdivs[i])
+    if (leftDivergeUp(x,y,drawLeft(x, y)[0])[0]) == True:
+        print("    leftSequence if leftDivUpCheck is True, else, x,y:",x,y)
+        listdivs = leftDivergeUp(x,y,drawLeft(x, y)[0])[1]
+        print("    listdivs leftDivergeUp:",listdivs)
+        for i in range(len(listdivs)):
+            if (pathFind(listdivs[i],y,2)) == True:
+                #print('rDU, listdiv[i]:',listdivs[i])
+                return True
+            #print('listdiv[i]:',listdivs[i])
     #leftPathDiverge(x,y,drawLeft(x,y)[0])
     #leftDivergeUp(x,y,drawLeft(x,y)[0])
     #leftDivergeDown(x,y,drawLeft(x,y)[0])
@@ -360,8 +329,8 @@ def upSequence(x,y):
         nextDir = 4
         return nextDir
 
-def pathFind(x,y,nextDir,divkey):
-
+def pathFind(x,y,nextDir):
+    print("entered pathFind <----->",x,y,nextDir)
     #Right = 0, Left = 1, Up = 2, Down = 3
     #DrawRight = 0, DrawLeft = 1, DrawUp = 2, DrawDown = 3
     origx = x
@@ -379,7 +348,7 @@ def pathFind(x,y,nextDir,divkey):
         if nextDir == 0:
             print("------------------->TURN RIGHT<-------------------",x,y)
             currentDir = nextDir
-            nextDir = rightSequence(x,y,divkey)
+            nextDir = rightSequence(x,y)
             #print("got here",x, y)
             #rightDiverge(x,y,drawRight(x, y)[0])
             x,y = drawRight(x, y)
@@ -391,23 +360,33 @@ def pathFind(x,y,nextDir,divkey):
                 nextDir = 5
                 xcheck = 1
                 print ('xcheck', xcheck,nextDir)
+            if nextDir == True:
+                nextDir = 5
         elif nextDir == 1:
             print("------------------->TURN LEFT<-------------------",x,y)
             currentDir = nextDir
-            leftSequence(x,y)
+            print("checkpoint1")
+            #leftSequence(x,y)
+            print("checkpoint2")
             nextDir = leftSequence(x,y)
+            print("checkpoint3")
             #print ("mid full left seq",x,y)
             x,y = drawLeft(x, y)
+            print("checkpoint4")
             xcheck = x
+            print("checkpoint5")
             if xcheck == 0 or xcheck == (width-1):
                 nextDir = 5
                 xcheck = 1
                 print ('xcheck', xcheck,nextDir, x, y)
-            #print ("nextDir: ", nextDir)
+            print("nextDir:",nextDir)
+            if nextDir == True:
+                nextDir = 5
+            print ("checkpoint6, nextDir: ", nextDir)
         elif nextDir == 2:
             print("------------------->TURN UP<-------------------",x,y)
             currentDir = nextDir
-            upSequence(x,y)
+            #upSequence(x,y)
             nextDir = upSequence(x,y)
             x,y = drawUp(x, y)
             ycheck = y
@@ -415,6 +394,8 @@ def pathFind(x,y,nextDir,divkey):
                 nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
+            if nextDir == True:
+                nextDir = 5
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
             #print(x, y, xcheck,"ycheck: ",ycheck)
@@ -423,13 +404,19 @@ def pathFind(x,y,nextDir,divkey):
             currentDir = nextDir
             print("about to find nextDir:", nextDir)
             nextDir = downSequence(x,y)
+            print("nextDir:",nextDir)
             x,y = drawDown(x, y)
+            print("nextDir:",nextDir)
             print("checking x and y after downSeq and drawDown:",x,y)
             ycheck = y
             if ycheck == 0 or ycheck == (height-1):
                 nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
+            print("nextDir:",nextDir)
+            if nextDir == True:
+                print("nextDir:",nextDir)
+                nextDir = 5
             #print ("y",y)
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
@@ -494,13 +481,14 @@ maze.save(basefilename + 'solved.png', 'PNG')
 def leftDivergeUp(x,y,newx):
     width = 0
     distance = x - newx
+    distance -= (halfspace+(halfspace/4))
     i = 1
     divpoint = 0
     listdivs = []
     print("LdU",distance)
     if (maze.getpixel((x-1,y - halfspace - 2)) > 0):
-        distance -= halfspace
-        x -= halfspace
+        distance -= (halfspace+(halfspace/4))
+        x -= (halfspace + (halfspace/3))
     print("i",i)
     while((distance - i + 1) > 0):
     #for i in range(distance):
@@ -513,20 +501,31 @@ def leftDivergeUp(x,y,newx):
             print('divpoint',divpoint)
             print(x - i)
         i += 1
+
+    """
     print(listdivs)
     for i in range(len(listdivs)):
         pathFind(listdivs[i],y,2)
         print('listdiv[i]:',listdivs[i])
+    """
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        return False, listdivs
 def leftDivergeDown(x,y,newx):
     width = 0
     distance = x - newx
+    print("prepreprehalfspace-----", distance,newx,x,halfspace)
+    distance -= (halfspace+(halfspace/4))
+    print("preprehalfspace-----", distance,newx,x,halfspace,(halfspace/3),halfspace+(halfspace/3))
     i = 1
     divpoint = 0
     listdivs = []
     print("LdD",distance)
     if (maze.getpixel((x-1,y + halfspace + 2)) > 0):
-        distance -= halfspace
-        x -= halfspace
+        distance -= (halfspace+(halfspace/4))
+        x -= (halfspace + (halfspace/3))
+        print("prehalfspace-----", distance,newx,x,halfspace)
     print("i",i)
     while((distance - i + 1) > 0):
     #for i in range(distance):
@@ -539,13 +538,18 @@ def leftDivergeDown(x,y,newx):
             print('divpoint',divpoint)
             print(x - i)
         i += 1
+    """
     print(listdivs)
     for i in range(len(listdivs)):
         pathFind(listdivs[i],y,3)
         print('listdiv[i]:',listdivs[i])
-
+    """
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        return False, listdivs
         
-def rightDivergeUpCheck(x,y,newx,divkey):
+def rightDivergeUp(x,y,newx):
     width = 0
     distance = newx - x
     i = 1
@@ -555,7 +559,7 @@ def rightDivergeUpCheck(x,y,newx,divkey):
     #print("RdU",distance)
     if (maze.getpixel((x+1,y - halfspace - 2)) > 0):
         distance -= (halfspace+(halfspace/4))
-        x += halfspace
+        x += (halfspace + (halfspace/3))
         print("halfspace-----", distance,x,halfspace)
     #print("i",i)
     #Gives a list of points of diversion
@@ -587,22 +591,23 @@ def rightDivergeUpCheck(x,y,newx,divkey):
                 return True
             #print('listdiv[i]:',listdivs[i])
     """
-def rightDivergeUp(listdivs,y,divkey):
-    """
+"""
+def rightDivergeUpOld(listdivs,y):
+
     for i in range(len(listdivs)):
         if (mainFunction(listdivs[i],y,2,divkey)) == True:
         #if (pathFind(listdivs[i],y,2,divkey)) == True:
             #print('rDU, listdiv[i]:',listdivs[i])
             return True
         #print('listdiv[i]:',listdivs[i])
-    """
-    print("rightDivergeUp | listdivs[0],y,divkey:",listdivs[0],y,divkey)
+
+    print("rightDivergeUp | listdivs[0],y,divkey:",listdivs[0],y)
     if (mainFunction(listdivs[0],y,2,True)) == True:
         return True
     else:
         return False
-def rightDivergeDown(listdivs,y,divkey):
-    """
+def rightDivergeDownOld(listdivs,y):
+
     for i in range(len(listdivs)):
         print ("got here, rightDivDown within end for loop",listdivs[i], y)
         if (mainFunction(listdivs[i],y,3,divkey)) == True:
@@ -610,13 +615,14 @@ def rightDivergeDown(listdivs,y,divkey):
             print("TRUEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",listdivs[i],y)
             return True
         print('listdiv[i]:',listdivs[i])
-    """
-    print("rightDivergeDown, listdivs[0],y,divkey:",listdivs[0],y,divkey)
+
+    print("rightDivergeDown, listdivs[0],y,divkey:",listdivs[0],y)
     if (mainFunction(listdivs[0],y,3,True)) == True:
         return True
     else:
         return False
-def rightDivergeDownCheck(x,y,newx,divkey):
+"""
+def rightDivergeDown(x,y,newx):
     width = 0
     distance = newx - x
     print("preprehalfspace-----", distance,newx,x,halfspace,(halfspace/3),halfspace+(halfspace/3))
@@ -628,7 +634,7 @@ def rightDivergeDownCheck(x,y,newx,divkey):
     #print("RdD",distance)
     if (maze.getpixel((x+1,y + halfspace + 2)) > 0):
         distance -= (halfspace+(halfspace/4))
-        x += halfspace + (halfspace/3)
+        x += (halfspace + (halfspace/3))
         print("halfspace-----", distance,x,halfspace)
     #print("i",i)
     #Gives a list of points of diversion
@@ -927,7 +933,7 @@ else:
     y = pathFind(1,109,0)[3]
     newx = pathFind(1,109,0)[4]
     print (x,y,newx)
-"""
+
 #pathFind(1,109,0,True)
 #print(rightDivergeDown(1,109,69),"---------------------------------------------")
 #print("---------------------------------------------",pathFind(27,109,3))
@@ -936,7 +942,7 @@ else:
 
 def mainFunction(x,y,startDir, divkey):
     print("||||||||||||||||||||mainFunctionStart||||||||||||||||||||x,y,startDir,divkey:",x,y,startDir,divkey)
-    """
+
     if divkey is True:
         if pathFind(x,y,startDir,divkey) == True:
             print("||||||||||||||||||||main function divkey True, returned True")
@@ -954,14 +960,16 @@ def mainFunction(x,y,startDir, divkey):
             print("||||||||||||||||||||main function divkey False, returned False")
             x,y,startDir = pathFind(x,y,startDir,divkey)[4],pathFind(x,y,startDir,divkey)[5],pathFind(x,y,startDir,divkey)[1]
             mainFunction(x,y,startDir,False)
-    """
+
     if pathFind(x,y,startDir,divkey) == True:
             print("||||||||||||||||||||main function divkey True, returned True")
             return True
     else:
         mainFunction(x,y,startDir,False)
+"""
 #mainFunction(1,109,0,False)
-pathFind(1,109,0,True)
+pathFind(217,109,1)
+
 """
 def mainFunction(1,109,0):
     if pathFind(1,109,0) == True:

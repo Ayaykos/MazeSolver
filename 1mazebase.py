@@ -25,7 +25,7 @@ width, height = maze.size
 #maze = ImageEnhance.Brightness(maze).enhance(50.0)
 
 
-print("\n-------------STARTING MAZE SOLVER-------------")
+print("\n\n-------------STARTING MAZE SOLVER-------------\n")
 ###----------------------------------------
 print("                 ...........                 \n")
 
@@ -293,6 +293,24 @@ def leftSequence(x,y):
 def downSequence(x,y):
     #print('x,y downSeq',x,y)
     drawDown(x,y)
+    if (downDivergeRight(x,y,drawDown(x, y)[1])[0]) == True:
+        print ("    downSequence if downDivRightCheck is True, x,y:",x,y)
+        listdivs = downDivergeRight(x,y,drawDown(x, y)[1])[1]
+        for i in range(len(listdivs)):
+            if (pathFind(x,listdivs[i],0)) == True:
+                return True
+            print('listdiv[i]:',listdivs[i])
+    else:
+        print ("    downSequence if downDivRightCheck is False, x,y:",x,y)
+    if (downDivergeLeft(x,y,drawDown(x, y)[1])[0]) == True:
+        print ("    downSequence if downDivLeftCheck is True, x,y:",x,y)
+        listdivs = downDivergeLeft(x,y,drawDown(x, y)[1])[1]
+        for i in range(len(listdivs)):
+            if (pathFind(x,listdivs[i],1)) == True:
+                return True
+            print('listdiv[i]:',listdivs[i])
+    else:
+        print ("    downSequence if downDivLeftCheck is False, x,y:",x,y)
     #downDivergeLeft(x,y,drawDown(x,y)[1])
     #downDivergeRight(x,y,drawDown(x,y)[1])
     x,y = drawDown(x, y)
@@ -312,6 +330,24 @@ def downSequence(x,y):
         return nextDir
 def upSequence(x,y):
     drawUp(x,y)
+    if (upDivergeRight(x,y,drawUp(x, y)[1])[0]) == True:
+        print ("    downSequence if downDivRightCheck is True, x,y:",x,y)
+        listdivs = upDivergeRight(x,y,drawUp(x, y)[1])[1]
+        for i in range(len(listdivs)):
+            if (pathFind(x,listdivs[i],0)) == True:
+                return True
+            print('listdiv[i]:',listdivs[i])
+    else:
+        print ("    downSequence if downDivRightCheck is False, x,y:",x,y)
+    if (upDivergeLeft(x,y,drawUp(x, y)[1])[0]) == True:
+        print ("    downSequence if downDivLeftCheck is True, x,y:",x,y)
+        listdivs = upDivergeLeft(x,y,drawUp(x, y)[1])[1]
+        for i in range(len(listdivs)):
+            if (pathFind(x,listdivs[i],1)) == True:
+                return True
+            print('listdiv[i]:',listdivs[i])
+    else:
+        print ("    downSequence if downDivLeftCheck is False, x,y:",x,y)
     #upDivergeLeft(x,y,drawUp(x,y)[1])
     #upDivergeRight(x,y,drawUp(x,y)[1])
     x,y = drawUp(x, y)
@@ -360,7 +396,7 @@ def pathFind(x,y,nextDir):
                 nextDir = 5
                 xcheck = 1
                 print ('xcheck', xcheck,nextDir)
-            if nextDir == True:
+            if nextDir is True:
                 nextDir = 5
         elif nextDir == 1:
             print("------------------->TURN LEFT<-------------------",x,y)
@@ -380,7 +416,7 @@ def pathFind(x,y,nextDir):
                 xcheck = 1
                 print ('xcheck', xcheck,nextDir, x, y)
             print("nextDir:",nextDir)
-            if nextDir == True:
+            if nextDir is True:
                 nextDir = 5
             print ("checkpoint6, nextDir: ", nextDir)
         elif nextDir == 2:
@@ -394,7 +430,7 @@ def pathFind(x,y,nextDir):
                 nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
-            if nextDir == True:
+            if nextDir is True:
                 nextDir = 5
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
@@ -414,8 +450,8 @@ def pathFind(x,y,nextDir):
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
             print("nextDir:",nextDir)
-            if nextDir == True:
-                print("nextDir:",nextDir)
+            if nextDir is True:
+                #print("nextDir:",nextDir)
                 nextDir = 5
             #print ("y",y)
             #print ("coordinates: ", x,y)
@@ -479,16 +515,20 @@ maze.save(basefilename + 'solved.png', 'PNG')
 ##################################
 
 def leftDivergeUp(x,y,newx):
+    print("leftDivergeUp entered")
     width = 0
     distance = x - newx
-    distance -= (halfspace+(halfspace/4))
+    print("prepreprehalfspace-----", distance,newx,x,halfspace,halfspace+(halfspace/4))
+    distance -= (halfspace+(halfspace/3))
+    print("preprehalfspace-----", distance,newx,x,halfspace)
     i = 1
     divpoint = 0
     listdivs = []
     print("LdU",distance)
     if (maze.getpixel((x-1,y - halfspace - 2)) > 0):
-        distance -= (halfspace+(halfspace/4))
-        x -= (halfspace + (halfspace/3))
+        distance -= (halfspace+(halfspace/3))
+        x -= (halfspace+(halfspace/4))
+        print("prehalfspace-----", distance,newx,x,halfspace)
     print("i",i)
     while((distance - i + 1) > 0):
     #for i in range(distance):
@@ -517,14 +557,14 @@ def leftDivergeDown(x,y,newx):
     distance = x - newx
     print("prepreprehalfspace-----", distance,newx,x,halfspace)
     distance -= (halfspace+(halfspace/4))
-    print("preprehalfspace-----", distance,newx,x,halfspace,(halfspace/3),halfspace+(halfspace/3))
+    print("preprehalfspace-----", distance,newx,x,halfspace,halfspace+(halfspace/4))
     i = 1
     divpoint = 0
     listdivs = []
     print("LdD",distance)
     if (maze.getpixel((x-1,y + halfspace + 2)) > 0):
         distance -= (halfspace+(halfspace/4))
-        x -= (halfspace + (halfspace/3))
+        x -= (halfspace+(halfspace/4))
         print("prehalfspace-----", distance,newx,x,halfspace)
     print("i",i)
     while((distance - i + 1) > 0):
@@ -558,8 +598,8 @@ def rightDivergeUp(x,y,newx):
     listdivs = []
     #print("RdU",distance)
     if (maze.getpixel((x+1,y - halfspace - 2)) > 0):
-        distance -= (halfspace+(halfspace/4))
-        x += (halfspace + (halfspace/3))
+        distance -= (halfspace+(halfspace/3))
+        x += (halfspace+(halfspace/4))
         print("halfspace-----", distance,x,halfspace)
     #print("i",i)
     #Gives a list of points of diversion
@@ -626,15 +666,15 @@ def rightDivergeDown(x,y,newx):
     width = 0
     distance = newx - x
     print("preprehalfspace-----", distance,newx,x,halfspace,(halfspace/3),halfspace+(halfspace/3))
-    distance -= (halfspace+(halfspace/4))
+    distance -= (halfspace+(halfspace/3))
     print("prehalfspace-----", distance,x,halfspace)
     i = 1
     divpoint = 0
     listdivs = []
     #print("RdD",distance)
     if (maze.getpixel((x+1,y + halfspace + 2)) > 0):
-        distance -= (halfspace+(halfspace/4))
-        x += (halfspace + (halfspace/3))
+        distance -= (halfspace+(halfspace/3))
+        x += (halfspace+(halfspace/4))
         print("halfspace-----", distance,x,halfspace)
     #print("i",i)
     #Gives a list of points of diversion
@@ -676,13 +716,16 @@ def rightDivergeDown(x,y,newx):
 def downDivergeLeft(x,y,newy):
     width = 0
     distance = newy - y
+    print("preprehalfspace-----", distance,newy,y,halfspace,(halfspace/3),halfspace+(halfspace/3))
     i = 1
     divpoint = 0
+    distance -= (halfspace+(halfspace/3))
+    print("preprehalfspace-----", distance,newy,y,halfspace)
     listdivs = []
     print("DdL",distance)
     if (maze.getpixel((x - halfspace - 2,y + i)) > 0):
-        distance -= halfspace
-        y -= halfspace
+        distance -= (halfspace+(halfspace/3))
+        y += (halfspace+(halfspace/4))
         print("halfspace-----", distance,y,halfspace)
     print("i",i)
     while((distance - i - 1) > 0):
@@ -697,22 +740,28 @@ def downDivergeLeft(x,y,newy):
             print('divpoint',divpoint)
             print(y + i)
         i += 1
-    
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        print("len(listdivs) = 0:",listdivs)
+        return False, listdivs
+    """
     print(listdivs)
     for i in range(len(listdivs)):
         pathFind(x,listdivs[i],1)
         print('listdiv[i]:',listdivs[i])
-
+    """
 def downDivergeRight(x,y,newy):
     width = 0
     distance = newy - y
     i = 1
     divpoint = 0
+    distance -= (halfspace+(halfspace/3))
     listdivs = []
     print("DdR",distance)
     if (maze.getpixel((x + halfspace + 2,y + i)) > 0):
-        distance -= halfspace
-        y -= halfspace
+        distance -= (halfspace+(halfspace/3))
+        y += (halfspace+(halfspace/4))
         print("halfspace-----", distance,y,halfspace)
     print("i",i)
     while((distance - i - 1) > 0):
@@ -727,22 +776,28 @@ def downDivergeRight(x,y,newy):
             print('divpoint',divpoint)
             print(y + i)
         i += 1
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        return False, listdivs
+    """
     print(listdivs)
     for i in range(len(listdivs)):
         pathFind(x,listdivs[i],0)
         print('listdiv[i]:',listdivs[i])
-
+    """
 
 def upDivergeLeft(x,y,newy):
     width = 0
     distance = y - newy
     i = 1
     divpoint = 0
+    distance -= (halfspace+(halfspace/3))
     listdivs = []
     print("UdL",distance)
     if (maze.getpixel((x - halfspace - 2,y - i)) > 0):
-        distance -= halfspace
-        y -= halfspace
+        distance -= (halfspace+(halfspace/3))
+        y -= (halfspace+(halfspace/4))
         print("halfspace-----", distance,y,halfspace)
     print("i",i)
     while((distance - i - 1) > 0):
@@ -757,20 +812,27 @@ def upDivergeLeft(x,y,newy):
             print('divpoint',divpoint)
             print(y - i)
         i += 1
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        return False, listdivs
+    """
     print(listdivs)
     for i in range(len(listdivs)):
         pathFind(x,listdivs[i],1)
         print('listdiv[i]:',listdivs[i])
+    """
 def upDivergeRight(x,y,newy):
     width = 0
     distance = y - newy
     i = 1
     divpoint = 0
+    distance -= (halfspace+(halfspace/3))
     listdivs = []
     print("UdR",distance)
     if (maze.getpixel((x + halfspace + 2,y - i)) > 0):
-        distance += halfspace
-        y += halfspace
+        distance -= (halfspace+(halfspace/3))
+        y -= (halfspace+(halfspace/4))
         print("halfspace-----", distance,y,halfspace)
     print("i",i)
     while((distance - i - 1) > 0):
@@ -785,7 +847,10 @@ def upDivergeRight(x,y,newy):
             print('divpoint',divpoint)
             print(y - i)
         i += 1
-    #return listdivs
+    if len(listdivs) > 0:
+        return True, listdivs
+    else:
+        return False, listdivs
     """
     print(listdivs)
     for i in range(len(listdivs)):
@@ -882,47 +947,6 @@ def rightDiverge(x,y,newx):
 
 ##################################
 
-###Instructions
-
-
-def manualFind(x,y,nextDir):
-
-    if nextDir == 0:
-        rightSequence(x,y)
-        nextDir = rightSequence(x,y)
-        x,y = drawRight(x, y)
-    elif nextDir == 1:
-        leftSequence(x,y)
-        nextDir = leftSequence(x,y)
-        x,y = drawLeft(x, y)
-    elif nextDir == 2:
-        upSequence(x,y)
-        nextDir = upSequence(x,y)
-        x,y = drawUp(x, y)
-    elif nextDir == 3:
-        downSequence(x,y)
-        nextDir = downSequence(x,y)
-        x,y = drawDown(x, y)
-
-    upSequence(x,y)
-    x,y = drawUp(x, y)
-    print("checking hor from down: ", x,y)
-    print(checkHor(x,y))
-    leftSequence(x,y)
-    x,y = drawLeft(x, y)
-    print("checking vert from left: ", x,y)
-    print(checkVert(x,y))
-    upSequence(x,y)
-    x,y = drawUp(x, y)
-    print("checking hor from down: ", x,y)
-    print(checkHor(x,y))
-    rightSequence(x,y)
-    x,y = drawRight(x, y)
-    print("checking vert from right: ", x,y)
-    print(checkVert(x,y))
-    downSequence(x,y)
-    #nextDir, x, y = upSequence(x,y)
-    x,y = drawDown(x, y)
 
 """
 if (pathFind(1,109,0)) == True:
@@ -968,7 +992,7 @@ def mainFunction(x,y,startDir, divkey):
         mainFunction(x,y,startDir,False)
 """
 #mainFunction(1,109,0,False)
-pathFind(217,109,1)
+pathFind(109,217,2)
 
 """
 def mainFunction(1,109,0):
@@ -1028,16 +1052,9 @@ for lists in range(len(divpoints)):
 
 
 
-
-drawRight(0, startpnt)
-x,y = drawRight(0, startpnt)
-#x = int(x)
-#y = int(y)
-print("checking vert from right: ", x,y)
-print(checkVert(x,y))
 """
 ##################################
 maze.save('maze1 backup sharpen fill.png', 'PNG')
 
-print("-----------------MAZE SOLVED------------------")
+print("-----------------MAZE SOLVED------------------\n")
 

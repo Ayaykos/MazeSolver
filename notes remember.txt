@@ -15,3 +15,10 @@ divFunctions - 10:30
 split path function - 12:00
 	-dinner
 only draw correct path - 2 hrs
+
+
+potential issue check later:
+	-paths not drawing exactly through middle
+potential issue check later:
+	-dead ends being too close to boundary, treated as exit path
+		-maybe at start in checkEntry also create checkExit and if found exit path doesn't match then scratch it

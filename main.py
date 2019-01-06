@@ -685,7 +685,7 @@ def main(filename):
             draw.line((vertexList[i][0],vertexList[i][1]) + (vertexList[i+1][0],vertexList[i+1][1]),fill="black")
         solvedname = basefilename + ' solved.png'
         maze.save(solvedname, 'PNG')
-        print("\nFinal path found.")
+        print("              Final path found.\n")
         print("-----------------MAZE SOLVED------------------\n")
         print("Check: ",solvedname)
         directory = "C:/Users/User/Documents/Ibrahim/Machine Learning/MazeSolver/" + solvedname

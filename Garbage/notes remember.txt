@@ -26,3 +26,5 @@ potential issue check later:
 getbands()
 
 sys?
+
+upscale image

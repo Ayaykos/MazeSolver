@@ -1,9 +1,10 @@
 # MazeSolver
 Completed and fully functional
 
-Analyzes an image of a perfect/simply-connected square maze and outputs a new image with a path-finding line showing the solved maze.
+#Analyzes an image of a perfect/simply-connected square maze and outputs a new image with a path-finding line showing the solved maze.
+---------------------------------------------------------
 Maze currently must be in black and white with thick walls
--------------------------------------------------------------
+
 
     Run main file: main.py
     Input file name (no extensions/suffixes)

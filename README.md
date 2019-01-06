@@ -12,4 +12,4 @@ Mostly functional, works best with medium/small-sized mazes
     Input file name (no extensions/suffixes)
     Program will run and output solved maze as new file and will open new file in window
 
-**Uses Pillow - PIL (Python Imaging Library) Fork**
+**Uses Pillow Library - PIL (Python Imaging Library) Fork**

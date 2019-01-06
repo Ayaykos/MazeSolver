@@ -22,3 +22,7 @@ potential issue check later:
 potential issue check later:
 	-dead ends being too close to boundary, treated as exit path
 		-maybe at start in checkEntry also create checkExit and if found exit path doesn't match then scratch it
+
+getbands()
+
+sys?

@@ -9,7 +9,7 @@ def checkEntry(filename):
     #checkFile(filename)
     
     maze = Image.open(filename)
-    maze = maze.convert('P') # conversion to RGB
+    maze = maze.convert('L') # conversion to P
     #maze = maze.load()
     ###Setup
     #maze = Image.open(filename)
@@ -90,24 +90,24 @@ def checkEntry(filename):
                         r = maze.getpixel((0,i+1))
                         if r == 0:
                             #print("broken")
-                            startDir = 1
+                            startDir = 0
                             startpnt = temp - (whitecount/2)
                             y = startpnt
                             break
                 if whitecount == 0:
                     startDir = 4
             else:
-                startDir = 3
+                startDir = 2
                 startpnt = temp - (whitecount/2)
                 x = startpnt
                 y = height - 1
         else:
-            startDir = 0
+            startDir = 1
             startpnt = temp - (whitecount/2)
             x = width - 1
             y = startpnt
     else:
-        startDir = 2
+        startDir = 3
         startpnt = temp - (whitecount/2)
         x = startpnt
 

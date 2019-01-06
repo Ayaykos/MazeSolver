@@ -7,13 +7,15 @@ import sys
 #print(ImageColor.getcolor('red', 'RGBA'))
 #basefilename = input('Enter Maze File Name (no extension/suffix): ')
 #filename = basefilename + '.png'
-filename = 'maze1 backup sharpen.png'
+filename = 'maze1 backup.png'
 maze = Image.open(filename)
-maze = maze.convert('P') # conversion to RGB
+maze2 = maze
+maze = maze.convert('P') # conversion
 #maze = maze.load()
 #maze.save(basefilename + 'solvedbw.png', 'PNG')
 
 draw = ImageDraw.Draw(maze)
+draw2 = ImageDraw.Draw(maze2)
 pix = maze.load()
 #print("Maze size: ", maze.size)
 
@@ -38,6 +40,9 @@ maxwidth = int(height/5)
 minwidth = 1
 fullline = 0
 vertexList = []
+checkWhenTrue = 0
+countRecurse = 0
+
 
 ###Get startpnt, pathwidth
 #Right = 0, Up = 1
@@ -58,6 +63,8 @@ if (startpnt % 2) is not 0:
     startpnt = startpnt+0.5
 divpoints = [[]]
 
+print("RCHECK AT 108,28:",maze.getpixel((108,28)))
+
 #getValues(whitecount,halfspace)
 
 
@@ -70,30 +77,38 @@ divpoints = [[]]
 ###Direction Functions
 def drawRight(x,y):
     fullline = 0
+    print("drawRight,x,y,i:",x,y)
     for i in range(width):
+        #print("i:",i)
+        if i == 0:
+            print("i:",i)
+            continue
         #print("got here 1--------", startpnt)
         if (i+x) <= (width-1):
             r = maze.getpixel((i+x,y))
+            #print("r at i+x,y:",r,"at",i+x,y)
         else:
             r = 0
         if (r > 0) and (i + x <= (width - 1)):
             fullline = i
-            #print("got here 2--------")
+            print("got here 2--------")
         else:
-            #print("got here 3--------")
+            print("got here 3--------,r,x,i+x,y:",r,x,i+x,y)
             if (i + x > (width - 1)):
                 #print("got here 4--------", fullline)
-                draw.line((x, y) + (width-1,y),fill=1)
+                draw.line((x, y) + (width-1,y),fill="black")
                 return (width-1, y)
                 break
             else:
-                #print("got here 5--------")
-                draw.line((x, y) + (x+(fullline - halfspace),y),fill=1)
+                print("got here 5--------",x+(fullline - halfspace),y,"fulline,halfspace:",fullline,halfspace)
+                draw.line((x, y) + (x+(fullline - halfspace),y),fill="black")
                 return (x+(fullline - halfspace),y)
                 break
 def drawLeft(x,y):
     fullline = 0
     for i in range(width):
+        if i == 0:
+            continue
         if (x - i >= 1):
             r = maze.getpixel((x-i,y))
         else:
@@ -102,18 +117,20 @@ def drawLeft(x,y):
             fullline = i
         else:
             if (x - i < 1):
-                draw.line((x, y) + (0,y),fill=1)
+                draw.line((x, y) + (0,y),fill="black")
                 return (0, y)
                 break
             else:
-                draw.line((x, y) + (x-(fullline - halfspace),y),fill=1)
+                draw.line((x, y) + (x-(fullline - halfspace),y),fill="black")
                 return (x-(fullline - halfspace),y)
                 break
 
 def drawDown(x,y):
     fullline = 0
-    #print("drawDown")
+    print("drawDown",x,y)
     for i in range(width):
+        if i == 0:
+            continue
         if (i + y <= height - 1):
             r = maze.getpixel((x,i+y))
         else:
@@ -124,20 +141,23 @@ def drawDown(x,y):
         else:
             if (y + i > height - 1):
                 #print('WRONG')
-                #print (x,y+i)
-                draw.line((x, y) + (x,height-1),fill=1)
+                print (x,y+i)
+                draw.line((x, y) + (x,height-1),fill="black")
                 return (x,height-1)
                 break
             else:
                 #print('RIGHT')
-                draw.line((x, y) + (x,y+(fullline - halfspace)),fill=1)
-                #print('coor, right:',x,y+(fullline - halfspace))
+                draw.line((x, y) + (x,y+(fullline - halfspace)),fill="black")
+                print('coor, right:',x,y+(fullline - halfspace),fullline)
                 return (x,y+(fullline - halfspace))
+                print("wtf")
                 break
     
 def drawUp(x,y):
     fullline = 0
     for i in range(width):
+        if i == 0:
+            continue
         if (y - i >= 1):
             r = maze.getpixel((x,y-i))
         else:
@@ -148,18 +168,19 @@ def drawUp(x,y):
         else:
             if(y - i < 1):
                 #print ("BROKE BOUNDARY, x,y-i : ", x,y-i)
-                draw.line((x, y) + (x,0),fill=1)
+                draw.line((x, y) + (x,0),fill="black")
                 return (x,0)
                 break
             else:
                 #print("not broken?")
-                draw.line((x, y) + (x,y-(fullline - halfspace)),fill=1)
+                draw.line((x, y) + (x,y-(fullline - halfspace)),fill="black")
                 return (x,y-(fullline - halfspace))
                 break
 
 ###Check Functions
     #Down/Right = False
 def checkVert(x,y):
+    print("inside checkvert")
     z = 0
     for i in range(3):
         r = maze.getpixel((x,y-(int(halfspace) + i)))
@@ -192,9 +213,11 @@ def checkVert(x,y):
 
 def checkHor(x,y):
     z = 0
+    print("began checkHor,x,y:",x,y)
     for i in range(3):
+        print(((x-(int(halfspace) + i),y)),x,y)
         r = maze.getpixel((x-(int(halfspace) + i),y))
-        #print('x,y:',((x-(int(halfspace) + i),y)),"r:",r)
+        print('x,y:',((x-(int(halfspace) + i),y)),"r:",r)
         if (r == 0):
             z = 1
             #print("R:", r)
@@ -202,7 +225,7 @@ def checkHor(x,y):
     if (z == 0):
         for i in range(3):
             r = maze.getpixel((x+(int(halfspace) + i),y))
-            print("this is r:",r,x,(x+(int(halfspace) + i),y))
+            #print("this is r:",r,x,(x+(int(halfspace) + i),y))
             if (r == 0):
                 z = 1
         if (z == 1):
@@ -223,36 +246,43 @@ def checkHor(x,y):
             return False
             #return ("Turn Right")
         else:
+            print("checkHor else,z=",z)
             return ('Dead end')
 
 
 def rightSequence(x,y):
-    drawRight(x,y)
+    oldx,oldy = x,y
+    x,y = drawRight(x, y)
+    if x == width - 1:
+        return True
     #checkIfBothFalse = 0
-    print("instide right sequence before any changes: x,y,drawRight(x, y)[0]:", x, y,drawRight(x, y)[0])
+    print("instide right sequence before any changes: x,y,drawRight(x, y)[0]:", oldx, oldy,x)
 
-    if (rightDivergeDown(x,y,drawRight(x, y)[0])[0]) == True:
+    if (rightDivergeDown(oldx,oldy,x)[0]) == True:
         #print ("    rightSequence if rightDivDownCheck is True, x,y:",x,y)
-        listdivs = rightDivergeDown(x,y,drawRight(x, y)[0])[1]
+        listdivs = rightDivergeDown(oldx,oldy,x)[1]
         #print("    listdivs:",listdivs)
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,3)) == True:
+            if (pathFind(listdivs[i],oldy,3)) == True:
                 #print('rDU, listdiv[i]:',listdivs[i])
                 return True
             #print('listdiv[i]:',listdivs[i])
-    if (rightDivergeUp(x,y,drawRight(x, y)[0])[0]) == True:
-        listdivs = rightDivergeUp(x,y,drawRight(x, y)[0])[1]
+    if (rightDivergeUp(oldx,oldy,x)[0]) == True:
+        listdivs = rightDivergeUp(oldx,oldy,x)[1]
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,2)) == True:
+            if (pathFind(listdivs[i],oldy,2)) == True:
                 return True
-    x,y = drawRight(x, y)
+    print("right before checkVert in rightSequence") 
     if checkVert(x,y) is False:
+        print("false")
         nextDir = 3
         return nextDir
     elif checkVert(x,y) is True:
+        print("truee")
         nextDir = 2
         return nextDir
     elif checkVert(x,y) is 0:
+        print("pathFind")
         if pathFind(x,y,3) == True:
             return True
         else:
@@ -264,22 +294,24 @@ def rightSequence(x,y):
         return nextDir
 
 def leftSequence(x,y):
-    drawLeft(x,y)
-
+    oldx, oldy = x,y
+    x,y = drawLeft(x, y)
+    if x == 0:
+        return True
     print("Entered left sequence")
-    if (leftDivergeDown(x,y,drawLeft(x, y)[0])[0]) == True:
-        listdivs = leftDivergeDown(x,y,drawLeft(x, y)[0])[1]
+    if (leftDivergeDown(oldx,oldy,x)[0]) == True:
+        listdivs = leftDivergeDown(oldx,oldy,x)[1]
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,3)) == True:
+            if (pathFind(listdivs[i],oldy,3)) == True:
                 #print('rDU, listdiv[i]:',listdivs[i])
                 return True
-    if (leftDivergeUp(x,y,drawLeft(x, y)[0])[0]) == True:
-        listdivs = leftDivergeUp(x,y,drawLeft(x, y)[0])[1]
+    if (leftDivergeUp(oldx,oldy,x)[0]) == True:
+        listdivs = leftDivergeUp(oldx,oldy,x)[1]
         for i in range(len(listdivs)):
-            if (pathFind(listdivs[i],y,2)) == True:
+            if (pathFind(listdivs[i],oldy,2)) == True:
                 return True
 
-    x,y = drawLeft(x, y)
+    #x,y = drawLeft(x, y)
 
     if checkVert(x,y) is False:
         #print ("nextDir = Down")
@@ -300,23 +332,29 @@ def leftSequence(x,y):
         return nextDir
 def downSequence(x,y):
     #print('x,y downSeq',x,y)
-    drawDown(x,y)
-    if (downDivergeRight(x,y,drawDown(x, y)[1])[0]) == True:
-        #print ("    downSequence if downDivRightCheck is True, x,y:",x,y)
-        listdivs = downDivergeRight(x,y,drawDown(x, y)[1])[1]
+    #drawDown(x,y)
+    oldx,oldy = x,y
+    x,y = drawDown(x, y)
+    if y == height - 1:
+        return True
+    if (downDivergeRight(oldx,oldy,y)[0]) == True:
+        print ("    downSequence if downDivRightCheck is True, x,y:",oldx,oldy)
+        listdivs = downDivergeRight(oldx,oldy,y)[1]
         for i in range(len(listdivs)):
-            if (pathFind(x,listdivs[i],0)) == True:
+            if (pathFind(oldx,listdivs[i],0)) == True:
                 return True
             #print('listdiv[i]:',listdivs[i])
-    #else:
-        #print ("    downSequence if downDivRightCheck is False, x,y:",x,y)
-    if (downDivergeLeft(x,y,drawDown(x, y)[1])[0]) == True:
-        #print ("    downSequence if downDivLeftCheck is True, x,y:",x,y)
-        listdivs = downDivergeLeft(x,y,drawDown(x, y)[1])[1]
+    else:
+        print ("    downSequence if downDivRightCheck is False, x,y:",x,y)
+    if (downDivergeLeft(oldx,oldy,y)[0]) == True:
+        print ("    downSequence if downDivLeftCheck is True, x,y:",oldx,oldy)
+        listdivs = downDivergeLeft(oldx,oldy,y)[1]
         for i in range(len(listdivs)):
-            if (pathFind(x,listdivs[i],1)) == True:
+            if (pathFind(oldx,listdivs[i],1)) == True:
                 return True
-    x,y = drawDown(x, y)
+    else:
+        print ("    downSequence if downDivLeftCheck is False, x,y:",x,y)    
+    print("right before checkHor from downseq",x,y)
     if checkHor(x,y) is False:
         #print ("nextDir = Right")
         nextDir = 0
@@ -332,24 +370,28 @@ def downSequence(x,y):
             nextDir = 1
             return nextDir
     else:
+        print("nextDir else,checkHor=",checkHor(x,y))
         nextDir = 4
         return nextDir
 def upSequence(x,y):
-    drawUp(x,y)
-    if (upDivergeRight(x,y,drawUp(x, y)[1])[0]) == True:
+    oldx,oldy = x,y
+    x,y = drawUp(x, y)
+    if y == 0:
+        return True
+    if (upDivergeRight(oldx,oldy,y)[0]) == True:
         #print ("    downSequence if downDivRightCheck is True, x,y:",x,y)
-        listdivs = upDivergeRight(x,y,drawUp(x, y)[1])[1]
+        listdivs = upDivergeRight(oldx,oldy,y)[1]
         for i in range(len(listdivs)):
-            if (pathFind(x,listdivs[i],0)) == True:
+            if (pathFind(oldx,listdivs[i],0)) == True:
                 return True
-    if (upDivergeLeft(x,y,drawUp(x, y)[1])[0]) == True:
+    if (upDivergeLeft(oldx,oldy,y)[0]) == True:
         #print ("    downSequence if downDivLeftCheck is True, x,y:",x,y)
-        listdivs = upDivergeLeft(x,y,drawUp(x, y)[1])[1]
+        listdivs = upDivergeLeft(oldx,oldy,y)[1]
         for i in range(len(listdivs)):
-            if (pathFind(x,listdivs[i],1)) == True:
+            if (pathFind(oldx,listdivs[i],1)) == True:
                 return True
 
-    x,y = drawUp(x, y)
+    
     #print ("HEREREREREREERE", x,y)
     if checkHor(x,y) is False:
         #print ("nextDir = Right")
@@ -375,13 +417,23 @@ def pathFind(x,y,nextDir):
     #Right = 0, Left = 1, Up = 2, Down = 3
     #DrawRight = 0, DrawLeft = 1, DrawUp = 2, DrawDown = 3
     global vertexList
-    tempList = []
+    global checkWhenTrue
+    global countRecurse
+    """
+    if countRecurse == 0:
+        print("COUNT RECURSE XY:",x,y)
+        tempList = []
+    else:
+        tempList = [[x,y]]
+    """
+    tempList = [[x,y]]
     origx = x
     origy = y
     xcheck = 1
     ycheck = 1
     ###Main loop
-    while (xcheck is not 0) and (xcheck is not (width-1)) and (ycheck is not 0) and (ycheck is not (height-1)):
+    #while (xcheck is not 0) and (xcheck is not (width-1)) and (ycheck is not 0) and (ycheck is not (height-1)):
+    while nextDir is not 5:
     #for i in range(38):
         #if not ((xcheck < width or xcheck >= 1)):
         #    print ("BROKEN")
@@ -391,15 +443,18 @@ def pathFind(x,y,nextDir):
         if nextDir == 0:
             print("------------------->TURN RIGHT<-------------------",x,y)
             currentDir = nextDir
+            #oldx,oldy = x,y
+            #x,y = drawRight(x, y)
             nextDir = rightSequence(x,y)
-            #print("got here",x, y)
-            #rightDiverge(x,y,drawRight(x, y)[0])
             x,y = drawRight(x, y)
+            print("got here",x, y)
+            #rightDiverge(x,y,drawRight(x, y)[0])
             #print("got here1", x, y)
             #print("x: ", x)
             xcheck = x
+            countRecurse += 1
             print("templist append (x,y): ",x,y)
-            tempList.append([x,y])
+            #tempList.append([x,y])
             #print("got here2", nextDir, xcheck)
             if xcheck == 0 or xcheck == (width-1):
                 nextDir = 5
@@ -407,20 +462,25 @@ def pathFind(x,y,nextDir):
                 print ('xcheck', xcheck,nextDir)
             if nextDir is True:
                 nextDir = 5
+            if checkWhenTrue == 0:
+                tempList.append([x,y])
         elif nextDir == 1:
             print("------------------->TURN LEFT<-------------------",x,y)
             currentDir = nextDir
             #print("checkpoint1")
             #leftSequence(x,y)
             #print("checkpoint2")
+            #oldx,oldy = x,y
+            #x,y = drawLeft(x, y)
             nextDir = leftSequence(x,y)
             #print("checkpoint3")
             #print ("mid full left seq",x,y)
             x,y = drawLeft(x, y)
             #print("checkpoint4")
             xcheck = x
+            countRecurse += 1
             print("templist append (x,y): ",x,y)
-            tempList.append([x,y])
+            
             #print("checkpoint5")
             if xcheck == 0 or xcheck == (width-1):
                 nextDir = 5
@@ -429,7 +489,9 @@ def pathFind(x,y,nextDir):
             print("nextDir:",nextDir)
             if nextDir is True:
                 nextDir = 5
-                
+            if checkWhenTrue == 0:
+                tempList.append([x,y])
+
             #print ("checkpoint6, nextDir: ", nextDir)
         elif nextDir == 2:
             print("------------------->TURN UP<-------------------",x,y)
@@ -438,28 +500,33 @@ def pathFind(x,y,nextDir):
             nextDir = upSequence(x,y)
             x,y = drawUp(x, y)
             ycheck = y
+            countRecurse += 1
             print("templist append (x,y): ",x,y)
-            tempList.append([x,y])
+            #tempList.append([x,y])
             if ycheck == 0 or ycheck == (height-1):
                 nextDir = 5
                 ycheck = 1
                 print ('ycheck', ycheck,nextDir)
             if nextDir is True:
                 nextDir = 5
+            if checkWhenTrue == 0:
+                tempList.append([x,y])
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
             #print(x, y, xcheck,"ycheck: ",ycheck)
         elif nextDir == 3:
             print("------------------->TURN DOWN<-------------------",x,y)
             currentDir = nextDir
-            #print("about to find nextDir:", nextDir)
+            print("about to find nextDir:", nextDir)
             nextDir = downSequence(x,y)
-            #print("nextDir:",nextDir)
+            print("nextDir:",nextDir)
             x,y = drawDown(x, y)
             #print("nextDir:",nextDir)
             #print("checking x and y after downSeq and drawDown:",x,y)
             ycheck = y
-            tempList.append([x,y])
+            
+            countRecurse += 1
+            #tempList.append([x,y])
             print("templist append (x,y): ",x,y,tempList)
             
             if ycheck == 0 or ycheck == (height-1):
@@ -470,13 +537,17 @@ def pathFind(x,y,nextDir):
             if nextDir is True:
                 #print("nextDir:",nextDir)
                 nextDir = 5
-            
+            if checkWhenTrue == 0:
+                tempList.append([x,y])            
             #print ("y",y)
             #print ("coordinates: ", x,y)
             #print ("nextDir: ", nextDir)
         elif nextDir == 4:
             print("dead end, break",x,y,"templist removed:",tempList)
             xcheck = 0
+            print("<--------------------------------------------------------------------------------reverserecurse",tempList)
+            tempList = []
+            countRecurse += 1
             return False
             break
         elif nextDir == 5:
@@ -487,50 +558,28 @@ def pathFind(x,y,nextDir):
             #print (xcheck, ycheck)
             #print ("startDir: ", startDir)
     if nextDir == 4:
-        print('final',origx,origy,x,y)
+        #print('final',origx,origy,x,y)
+        print("<--------------------------------------------------------------------------------reverserecurse",tempList)
+        tempList = []
+        countRecurse += 1
         #xcheck = 0
         #return False,currentDir,origx,origy,x,y
         return False
     elif nextDir == 5:
-        print("right before vertexList",tempList)
+        print("right before vertexList",tempList,x,y)
+        print("<--------------------------------------------------------------------------------reverserecurse",tempList)
         for i in tempList:
             vertexList.append(i)
+        checkWhenTrue = 1
+        countRecurse += 1
         return True
     else:
         print ("uhh what is this")
 
-###Check entry point
-x = checkEntry(filename)[3] 
-y = checkEntry(filename)[4]
 
-"""
-#print ("startDir: ", startDir)
-if startDir == 0:
-    #print("X,Y" , x,y)
-    leftSequence(x,y)
-    #print("X,Y" , x,y)
-    nextDir = leftSequence(x,y)
-    x,y = drawLeft(x, y)
+#pathFind(x,y,nextDir)
 
-elif startDir == 1:
-    rightSequence(x,y)
-    nextDir = rightSequence(x,y)
-    x,y = drawRight(x, y)
-elif startDir == 2:
-    #print("X,Y" , x,y)
-    downSequence(x,y)
-    nextDir = downSequence(x,y)
-    x,y = drawDown(x, y)
-    #print ("nextDir: ", nextDir)
-elif startDir == 3:
-    upSequence(x,y)
-    nextDir = leftUp(x,y)
-    x,y = drawUp(x, y)
-
-pathFind(x,y,nextDir)
-
-maze.save(basefilename + 'solved.png', 'PNG')
-"""
+#maze.save(basefilename + 'solved.png', 'PNG')
 
 ##################################
 
@@ -817,44 +866,72 @@ def upDivergeRight(x,y,newy):
 #rightDiverge(1,109,69)
 
 """
-vertexList.append([1,109])
-#mainFunction(1,109,0,False)
-if (pathFind(1,109,0)) == True:
-    print("\nFinal path found.",vertexList)
-else:
-    print("\nError in maze.",vertexList)
-
-countList = 0
-
-print(vertexList)
+###Check entry point
+x = checkEntry(filename)[3] 
+y = checkEntry(filename)[4]
+print("-----------------------------------------------------x,y:",x,y,startDir)
+vertexList.append([x,y])
 """
-for i in vertexList:
-    for j in range((len(i))-1):
-        #draw.line((i[j][0], i[j][1]) + (x,0),fill=2)
-        #print(i[j][0],i[j][1],"|",i[j+1][0],i[j+1][1])
-        print (j)
-        print(i[j-1][0],i[j][1])
+#print ("startDir: ", startDir)
+if startDir == 1:
+    print("X,Y" , x,y)
+    leftSequence(x,y)
+    vertexList.append([x,y])
+    print("X,Y" , x,y)
+    nextDir = leftSequence(x,y)
+    print("nextDirleft",nextDir)
+    #vertexList.append([x,y])
+    x,y = drawLeft(x, y)
+    
+    print("------------------------------------------------------",[x,y])
+elif startDir == 0:
+    rightSequence(x,y)
+    nextDir = rightSequence(x,y)
+    print("nextDirRight",nextDir)
+    #vertexList.append([x,y])
+    x,y = drawRight(x, y)
+    vertexList.append([x,y])
+    print("------------------------------------------------------",x,y)
+elif startDir == 2:
+    #print("X,Y" , x,y)
+    downSequence(x,y)
+    nextDir = downSequence(x,y)
+    #vertexList.append([x,y])
+    x,y = drawDown(x, y)
+    vertexList.append([x,y])
+    print("------------------------------------------------------",x,y)
+    #print ("nextDir: ", nextDir)
+elif startDir == 3:
+    upSequence(x,y)
+    nextDir = upSequence(x,y)
+    #vertexList.append([x,y])
+    x,y = drawUp(x, y)
+    vertexList.append([x,y])
+    print("------------------------------------------------------",x,y)
+"""
+r = maze.getpixel((109,1))
+r2 = maze.getpixel((217,1))
+print(r,r2)
+#print("nextDir", nextDir)
+#vertexList.append([1,109])
+#mainFunction(1,109,0,False)
 
-print("\n\n")
-for i in vertexList:
-    for j in i:
-        #draw.line((i[j][0], i[j][1]) + (x,0),fill=2)
-        #print(i[j][0],i[j][1],"|",i[j+1][0],i[j+1][1])
-        if countList == len(i):
-            break
-        else:
-            #print(j[0],j[1],len(i),i[countList])
-            print(i[countList][0],i[countList][1],len(i))
-            countList += 1
-        #print("count:",countList)
+if (pathFind(x,y,startDir)) == True:
+    print("\nFinal path found.")
+else:
+    print("\nError in maze.")
+
+print("\n",vertexList)    
 """
 for i in range(len(vertexList)-1):
-    #print(vertexList[i][0],vertexList[i][1], "|",vertexList[i+1][0],vertexList[i+1][1])
-    draw.line((vertexList[i][0],vertexList[i][1]) + (vertexList[i+1][0],vertexList[i+1][1]),fill=2)
+    draw.line((vertexList[i][0],vertexList[i][1]) + (vertexList[i+1][0],vertexList[i+1][1]),fill="black")
+"""
 
-    
+
+#draw.line((1,1) + (217,217),fill="black")
 ##################################
-maze.save('maze1 backup sharpen fill.png', 'PNG')
+#maze.save('maze1 backup sharpen fill.png', 'PNG')
+maze.save('maze1 backup solved.png', 'PNG')
 
 print("-----------------MAZE SOLVED------------------\n")
-
+#print("Check file:",basefilename + ' solved.png')

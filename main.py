@@ -1,6 +1,8 @@
 from PIL import Image, ImageColor, ImageDraw, ImageEnhance
 from checkentry import checkEntry
 import os
+import time
+from decimal import Decimal
 
 ###Global vars
 temp = 0
@@ -36,6 +38,18 @@ def resetGlobVars():
     pathwidth = 0
     global halfspace
     halfspace = 0
+
+###Rounding Functions
+def roundUp(x):
+    y = str(float(x))
+    if y[-1] != '0':
+        x = int(x)+1
+    return x
+def roundDown(x):
+    y = str(float(x))
+    if y[-1] != '0':
+        x = int(x)
+    return x
 
 #############################################################################################
     
@@ -338,13 +352,14 @@ def leftDivergeUp(x,y,newx):
     i = 1
     divpoint = 0
     listdivs = []
+    ifRounded = 0
     if (maze.getpixel((x-1,y - halfspace - 2)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        x -= (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        x -= (halfspace+(halfspace/3))
     while((distance - i + 1) > 0):
-        r = maze.getpixel((x - i,y - halfspace - 2))
+        r = maze.getpixel((x - i - ifRounded,y - halfspace - 3))
         if r > 0:
-            divpoint = x - i + 1 - halfspace
+            divpoint = x - i - ifRounded + 0 - halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -360,12 +375,12 @@ def leftDivergeDown(x,y,newx):
     divpoint = 0
     listdivs = []
     if (maze.getpixel((x-1,y + halfspace + 2)) > 0):
-        distance -= (halfspace+(halfspace/4))
-        x -= (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        x -= (halfspace+(halfspace/3))
     while((distance - i + 1) > 0):
         r = maze.getpixel((x - i,y + halfspace + 2))
         if r > 0:
-            divpoint = x - i + 1 - halfspace
+            divpoint = x - i + 0 - halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -382,12 +397,12 @@ def rightDivergeUp(x,y,newx):
     distance -= (halfspace+(halfspace/4))
     listdivs = []
     if (maze.getpixel((x+1,y - halfspace - 2)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        x += (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        x += (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x + i,y - halfspace - 2))
         if r > 0:
-            divpoint = x + i - 1 + halfspace
+            divpoint = x + i - 0 + halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -404,12 +419,12 @@ def rightDivergeDown(x,y,newx):
     divpoint = 0
     listdivs = []
     if (maze.getpixel((x+1,y + halfspace + 2)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        x += (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        x += (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x + i,y + halfspace + 2))
         if r > 0:
-            divpoint = x + i - 1 + halfspace
+            divpoint = x + i - 0 + halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -427,12 +442,12 @@ def downDivergeLeft(x,y,newy):
     distance -= (halfspace+(halfspace/3))
     listdivs = []
     if (maze.getpixel((x - halfspace - 2,y + i)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        y += (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        y += (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x - halfspace - 2,y + i))
         if r > 0:
-            divpoint = y + i - 1 + halfspace
+            divpoint = y + i - 0 + halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -449,12 +464,12 @@ def downDivergeRight(x,y,newy):
     distance -= (halfspace+(halfspace/3))
     listdivs = []
     if (maze.getpixel((x + halfspace + 2,y + i)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        y += (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        y += (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x + halfspace + 2,y + i))
         if r > 0:
-            divpoint = y + i - 1 + halfspace
+            divpoint = y + i - 0 + halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -464,6 +479,7 @@ def downDivergeRight(x,y,newy):
         return False, listdivs
 
 def upDivergeLeft(x,y,newy):
+    #y = roundDown(y)
     width = 0
     distance = y - newy
     i = 1
@@ -471,12 +487,12 @@ def upDivergeLeft(x,y,newy):
     distance -= (halfspace+(halfspace/3))
     listdivs = []
     if (maze.getpixel((x - halfspace - 2,y - i)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        y -= (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        y -= (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x - halfspace - 2,y - i))
         if r > 0:
-            divpoint = y - i - 1 - halfspace
+            divpoint = y - i - 0 - halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -487,7 +503,7 @@ def upDivergeLeft(x,y,newy):
     while((distance - i - 1) > 0):
         r = maze.getpixel((x + halfspace + 2,y - i))
         if r > 0:
-            divpoint = y - i - 1 - halfspace
+            divpoint = y - i - 0 - halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -496,6 +512,7 @@ def upDivergeLeft(x,y,newy):
     else:
         return False, listdivs
 def upDivergeRight(x,y,newy):
+    #y = roundDown(y)
     width = 0
     distance = y - newy
     i = 1
@@ -503,12 +520,12 @@ def upDivergeRight(x,y,newy):
     distance -= (halfspace+(halfspace/3))
     listdivs = []
     if (maze.getpixel((x + halfspace + 2,y - i)) > 0):
-        distance -= (halfspace+(halfspace/3))
-        y -= (halfspace+(halfspace/4))
+        distance -= (halfspace+(halfspace/2))
+        y -= (halfspace+(halfspace/3))
     while((distance - i - 1) > 0):
         r = maze.getpixel((x + halfspace + 2,y - i))
         if r > 0:
-            divpoint = y - i - 1 - halfspace
+            divpoint = y - i - 0 - halfspace
             i += pathwidth
             listdivs.append(divpoint)
         i += 1
@@ -534,6 +551,7 @@ def pathFind(x,y,nextDir):
     while nextDir is not 5:
         if nextDir == 0:
             #Turn Right
+            x = roundUp(x)
             countTurn += 1
             currentDir = nextDir
             nextDir,x,y = rightSequence(x,y)
@@ -555,8 +573,10 @@ def pathFind(x,y,nextDir):
                     
         elif nextDir == 1:
             #Turn Left
+            x = roundDown(x)
             countTurn += 1
             currentDir = nextDir
+            oldx,oldy = x,y
             nextDir,x,y = leftSequence(x,y)
             xcheck = x
             
@@ -576,6 +596,7 @@ def pathFind(x,y,nextDir):
       
         elif nextDir == 2:
             #Turn Up
+            y = roundDown(y)
             countTurn += 1
             currentDir = nextDir
             nextDir,x,y = upSequence(x,y)
@@ -596,6 +617,7 @@ def pathFind(x,y,nextDir):
 
         elif nextDir == 3:
             #Turn Down
+            y = roundUp(y)
             countTurn += 1
             currentDir = nextDir
             nextDir,x,y = downSequence(x,y)
@@ -643,8 +665,13 @@ def pathFind(x,y,nextDir):
 #############################################################################################
 
 def main(filename):
+    start_time = time.clock()
     global maze
-    maze = Image.open(filename)
+    try:
+        maze = Image.open(filename)
+    except FileNotFoundError:
+        print("File not found.\n")
+        return False
     maze = maze.convert('RGBA')
     maze = ImageEnhance.Brightness(maze).enhance(50.0)
     maze = maze.convert('P')
@@ -653,6 +680,9 @@ def main(filename):
     global width
     global height
     width, height = maze.size
+    
+    print("\n\n-------------STARTING MAZE SOLVER-------------\n")
+    print("                 ...........                 \n")
     
     checkEntry(filename)
 
@@ -687,7 +717,10 @@ def main(filename):
         maze.save(solvedname, 'PNG')
         print("              Final path found.\n")
         print("-----------------MAZE SOLVED------------------\n")
-        print("Check: ",solvedname)
+        x = Decimal(time.clock() - start_time)
+        elapsedtime = round(x,2)
+        print ("Time elapsed:",elapsedtime,"seconds")
+        print("Check file:",solvedname,"\n")
         directory = "C:/Users/User/Documents/Ibrahim/Machine Learning/MazeSolver/" + solvedname
         os.startfile(directory)
     else:
@@ -699,10 +732,7 @@ key = ''
 while(key is not 'Q' and key is not 'q'):
     basefilename = input('Enter Maze File Name (no extension/suffix): ')
     filename = basefilename + '.png'
-    print("\n\n-------------STARTING MAZE SOLVER-------------\n")
-    print("                 ...........                 \n")
     main(filename)
     resetGlobVars()
-    key = input("Press Q to exit or any key to continue.")
-
+    key = input("Press any key to enter new file or Q to exit: ")
 

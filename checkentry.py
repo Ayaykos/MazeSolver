@@ -18,65 +18,46 @@ def checkEntry(filename):
     minwidth = 1
     fullline = 0
 
-
-    ###Get startpnt, pathwidth
     #Right = 0, Left = 1, Up = 2, Down = 3 ? recheck
 
-    #top
+    #check top side
     for i in range(width-1):
         r = maze.getpixel((i,0))
-        #print ("get pixel, a: ", a, maze.getpixel((0,a)))
         if r > 0:
             whitecount += 1
             temp = i
-            #print(r)
             r = maze.getpixel((i+1,0))
             if r == 0:
-                #print("broken")
                 break
-    #print("---------------------")
     if whitecount == 0:
-        #print ("check next side")
-        #right
+        #check right side
         for i in range(height-1):
             r = maze.getpixel((width-1,i))
-            #print ("get pixel, a: ", a, maze.getpixel((0,a)))
             if r > 0:
                 whitecount += 1
                 temp = i
-                #print("width-1,i+1",width-1,i+1)
                 r = maze.getpixel((width-1,i+1))
                 if r == 0:
-                    #print("broken")
                     break
-        #print("---------------------")
         if whitecount == 0:
-            #print ("check next side")
-            #bottom
+            #check bottom side
             for i in range(width-1):
                 r = maze.getpixel((i,height-1))
-                #print ("get pixel, a: ", a, maze.getpixel((0,a)))
                 if r > 0:
                     whitecount += 1
                     temp = i
-                    #print(r)
                     r = maze.getpixel((i+1,height-1))
                     if r == 0:
-                        #print("broken")
                         break
             if whitecount == 0:
-                #print ("check next side")
-                #left
+                #check left side
                 for i in range(height-1):
                     r = maze.getpixel((0,i))
-                    #print ("get pixel, a: ", a, maze.getpixel((0,a)))
                     if r > 0:
                         whitecount += 1
                         temp = i
-                        #print(r)
                         r = maze.getpixel((0,i+1))
                         if r == 0:
-                            #print("broken")
                             startDir = 0
                             startpnt = temp - (whitecount/2)
                             y = startpnt

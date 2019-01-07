@@ -4,7 +4,7 @@
 
 Completed and fully functional.
 
-*Maze currently must be in black and white with thick walls, with pathway being white and walls being black*
+*Maze currently must have white pathway and thick black walls with no extra white space beyond border of maze*
 
 ---------------------------------------------------------
 Instructions:

@@ -16,6 +16,7 @@ temp = 0
 startpnt = 0
 pathwidth = 0
 halfspace = 0
+count = 0
 
 def resetGlobVars():
     global fullline
@@ -56,6 +57,8 @@ def roundDown(x):
 ###Direction Draw Functions
 
 def drawRight(x,y):
+    global count
+    count += 1
     fullline = 0
     for i in range(width):
         if i == 0:
@@ -76,6 +79,8 @@ def drawRight(x,y):
                 return (x+(fullline - halfspace),y)
                 break
 def drawLeft(x,y):
+    global count
+    count += 1
     fullline = 0
     for i in range(width):
         if i == 0:
@@ -97,6 +102,8 @@ def drawLeft(x,y):
                 break
 
 def drawDown(x,y):
+    global count
+    count += 1
     fullline = 0
     for i in range(width):
         if i == 0:
@@ -118,6 +125,8 @@ def drawDown(x,y):
                 break
     
 def drawUp(x,y):
+    global count
+    count += 1
     fullline = 0
     for i in range(width):
         if i == 0:
@@ -679,6 +688,7 @@ def main(filename):
     draw = ImageDraw.Draw(maze)
     global width
     global height
+    global count
     width, height = maze.size
     
     print("\n\n-------------STARTING MAZE SOLVER-------------\n")
@@ -720,6 +730,8 @@ def main(filename):
         x = Decimal(time.clock() - start_time)
         elapsedtime = round(x,2)
         print ("Time elapsed:",elapsedtime,"seconds")
+        #print("NCount:",count)
+        count = 0
         print("Check file:",solvedname)
         directory = "C:/Users/User/Documents/Ibrahim/Machine Learning/MazeSolver/" + solvedname
         openfile = input("Open file? (yes = 1/no = 0) ")

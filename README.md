@@ -4,7 +4,7 @@
 
 Completed and fully functional.
 
-*Maze currently must be in black and white with thick walls, with pathway being white and walls being black and have 1 startpoint and 1 endpoint*
+*Maze currently must be in black and white with thick walls, with pathway being white and walls being black*
 
 ---------------------------------------------------------
 Instructions:

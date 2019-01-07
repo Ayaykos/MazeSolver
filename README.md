@@ -11,7 +11,7 @@ Instructions:
 
     Run main file: main.py
     Input file name (no extensions/suffixes)
-    Program will run and output solved maze as new file and will open new file in window
+    Program will run and output solved maze as new file and will open file in new window
    
 Sample solved mazes using MazeSolver included (testmaze#.png)
 

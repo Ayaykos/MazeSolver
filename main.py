@@ -720,9 +720,11 @@ def main(filename):
         x = Decimal(time.clock() - start_time)
         elapsedtime = round(x,2)
         print ("Time elapsed:",elapsedtime,"seconds")
-        print("Check file:",solvedname,"\n")
+        print("Check file:",solvedname)
         directory = "C:/Users/User/Documents/Ibrahim/Machine Learning/MazeSolver/" + solvedname
-        os.startfile(directory)
+        openfile = input("Open file? (yes = 1/no = 0) ")
+        if openfile == '1':
+            os.startfile(directory)
     else:
         print("\nError in maze.")
 
@@ -734,5 +736,5 @@ while(key is not 'Q' and key is not 'q'):
     filename = basefilename + '.png'
     main(filename)
     resetGlobVars()
-    key = input("Press any key to enter new file or Q to exit: ")
+    key = input("\nPress any key to enter new file or Q to exit: ")
 

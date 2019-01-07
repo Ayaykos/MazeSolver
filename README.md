@@ -1,7 +1,8 @@
 # MazeSolver
-Completed and fully functional.
 
 **Analyzes an image of a perfect/simply-connected square maze and outputs a new image with a path-finding line showing the solved maze.**
+
+Completed and fully functional.
 
 *Maze currently must be in black and white with thick walls, with pathway being white and walls being black and have 1 startpoint and 1 endpoint*
 

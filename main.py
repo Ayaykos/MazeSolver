@@ -355,7 +355,6 @@ def upSequence(x,y):
 ###Path Diversion Functions
 
 def leftDivergeUp(x,y,newx):
-    width = 0
     distance = x - newx
     distance -= (halfspace+(halfspace/3))
     i = 1
@@ -377,7 +376,6 @@ def leftDivergeUp(x,y,newx):
     else:
         return False, listdivs
 def leftDivergeDown(x,y,newx):
-    width = 0
     distance = x - newx
     distance -= (halfspace+(halfspace/4))
     i = 1
@@ -399,7 +397,6 @@ def leftDivergeDown(x,y,newx):
         return False, listdivs
         
 def rightDivergeUp(x,y,newx):
-    width = 0
     distance = newx - x
     i = 1
     divpoint = 0
@@ -421,7 +418,6 @@ def rightDivergeUp(x,y,newx):
         return False, listdivs
 
 def rightDivergeDown(x,y,newx):
-    width = 0
     distance = newx - x
     distance -= (halfspace+(halfspace/3))
     i = 1
@@ -444,7 +440,6 @@ def rightDivergeDown(x,y,newx):
         return False, listdivs
 
 def downDivergeLeft(x,y,newy):
-    width = 0
     distance = newy - y
     i = 1
     divpoint = 0
@@ -466,7 +461,6 @@ def downDivergeLeft(x,y,newy):
         return False, listdivs
 
 def downDivergeRight(x,y,newy):
-    width = 0
     distance = newy - y
     i = 1
     divpoint = 0
@@ -488,8 +482,6 @@ def downDivergeRight(x,y,newy):
         return False, listdivs
 
 def upDivergeLeft(x,y,newy):
-    #y = roundDown(y)
-    width = 0
     distance = y - newy
     i = 1
     divpoint = 0
@@ -521,8 +513,6 @@ def upDivergeLeft(x,y,newy):
     else:
         return False, listdivs
 def upDivergeRight(x,y,newy):
-    #y = roundDown(y)
-    width = 0
     distance = y - newy
     i = 1
     divpoint = 0
@@ -691,17 +681,19 @@ def main(filename):
     global count
     width, height = maze.size
     
-    print("\n\n-------------STARTING MAZE SOLVER-------------\n")
-    print("                 ...........                 \n")
-    
-    checkEntry(filename)
+
+    checkOutput = checkEntry(filename)
 
     global whitecount
-    whitecount = checkEntry(filename)[0]
+    whitecount = checkOutput[0]
+    if whitecount == 2:
+        print("Maze path width size (2px) incompatible.")
+        return False
+
     global startDir
-    startDir = checkEntry(filename)[1]
+    startDir = checkOutput[1]
     global temp
-    temp = checkEntry(filename)[2]
+    temp = checkOutput[2]
 
     global startpnt
     startpnt = temp - (whitecount/2)
@@ -709,20 +701,32 @@ def main(filename):
     pathwidth = (whitecount)
     global halfspace
     halfspace = (whitecount/2)
+
+    print("\n\n-------------STARTING MAZE SOLVER-------------\n")
+    print("                 ...........                 \n")
     
-    x = checkEntry(filename)[3] 
-    y = checkEntry(filename)[4]
+    x = checkOutput[3] 
+    y = checkOutput[4]
     
     if (halfspace % 2) is not 0:
         halfspace = halfspace-0.5
     if (startpnt % 2) is not 0:
         startpnt = startpnt+0.5
-    
+        
     if (pathFind(x,y,startDir)) == True:
         maze = maze.convert('RGBA')
         draw = ImageDraw.Draw(maze,'RGBA')
+        if pathwidth > 4:
+            linewidth = pathwidth*0.7
+            linewidth = roundUp(linewidth)
+        elif pathwidth > 1:
+            linewidth = pathwidth/2
+            linewidth = roundDown(linewidth)
+        else:
+            linewidth = 1
+        linewidth = int(linewidth)
         for i in range(len(vertexList)-1):
-            draw.line((vertexList[i][0],vertexList[i][1]) + (vertexList[i+1][0],vertexList[i+1][1]),fill="black")
+            draw.line((vertexList[i][0],vertexList[i][1]) + (vertexList[i+1][0],vertexList[i+1][1]),fill="firebrick",width=linewidth)
         solvedname = basefilename + ' solved.png'
         maze.save(solvedname, 'PNG')
         print("              Final path found.\n")
@@ -733,7 +737,8 @@ def main(filename):
         #print("NCount:",count)
         count = 0
         print("Check file:",solvedname)
-        directory = "C:/Users/User/Documents/Ibrahim/Machine Learning/MazeSolver/" + solvedname
+        directory = os.path.dirname(os.path.realpath(solvedname))
+        directory = directory + "\\" + solvedname
         openfile = input("Open file? (yes = 1/no = 0) ")
         if openfile == '1':
             os.startfile(directory)

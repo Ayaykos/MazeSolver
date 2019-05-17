@@ -14,5 +14,8 @@ Instructions:
     Program will run and output solved maze as new file within directory
    
 Sample solved mazes using MazeSolver included (testmaze#.png)
+<p align="left">
+  <img src="https://github.com/Ayaykos/MazeSolver/blob/master/testmaze4%20solved.png" width="350" title="testmaze4 solved">
+</p>
 
 **Uses Pillow Library - PIL (Python Imaging Library) Fork**
